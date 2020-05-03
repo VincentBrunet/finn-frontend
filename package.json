@@ -1,21 +1,19 @@
 {
-  "name": "electron-react-typescript",
-  "version": "0.0.7",
+  "name": "finn-frontend",
+  "version": "0.0.1",
   "description": "",
   "main": "./dist/main.js",
   "scripts": {
     "build-main": "cross-env NODE_ENV=production webpack --config webpack.main.prod.config.js",
     "build-renderer": "cross-env NODE_ENV=production webpack --config webpack.renderer.prod.config.js",
     "build": "npm run build-main && npm run build-renderer",
-    "start-renderer-dev": "webpack-dev-server --config webpack.renderer.dev.config.js",
-    "start-main-dev": "webpack --config webpack.main.config.js && electron ./dist/main.js",
-    "start-dev": "cross-env START_HOT=1 npm run start-renderer-dev",
+    "renderer-dev": "webpack-dev-server --config webpack.renderer.dev.config.js",
+    "main-dev": "webpack --config webpack.main.config.js && electron ./dist/main.js",
+    "dev": "cross-env START_HOT=1 npm run renderer-dev",
     "prestart": "npm run build",
     "start": "electron .",
     "lint": "eslint --ext=jsx,js,tsx,ts src",
-    "test": "jest '(\\/test\\/(?!e2e/)).*'",
     "pretest:e2e": "npm run build",
-    "test:e2e": "jest '(\\/test\\/e2e/).*'",
     "pack": "npm run build && electron-builder --dir",
     "dist": "npm run build && electron-builder",
     "postinstall": "electron-builder install-app-deps"
@@ -26,30 +24,13 @@
     }
   },
   "lint-staged": {
-    "{src,test,mocks}/**/*.{json,css,scss,md}": [
+    "{src}/**/*.{json,css,scss,md}": [
       "prettier --config ./.prettierrc --write"
     ],
-    "{src,test,mocks}/**/*.{js,ts,tsx}": [
+    "{src}/**/*.{js,ts,tsx}": [
       "prettier --config ./.prettierrc --write",
       "eslint --ext=jsx,js,ts,tsx --fix src"
     ]
-  },
-  "jest": {
-    "transform": {
-      "^.+\\.tsx?$": "ts-jest"
-    },
-    "testRegex": "(/test/.+\\.spec)\\.tsx?$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "json",
-      "node"
-    ],
-    "moduleNameMapper": {
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/mocks/fileMock.js",
-      "\\.(s?css|sass)$": "<rootDir>/mocks/styleMock.js"
-    }
   },
   "build": {
     "productName": "ProductName",
@@ -72,19 +53,6 @@
       "target": "nsis"
     }
   },
-  "repository": {
-    "type": "git",
-    "url": "git+ssh://git@github.com:Robinfr/electron-react-typescript.git"
-  },
-  "author": {
-    "name": "Your name",
-    "email": "Your email"
-  },
-  "license": "SEE LICENSE",
-  "bugs": {
-    "url": "https://github.com/Robinfr/electron-react-typescript/issues"
-  },
-  "homepage": "https://github.com/Robinfr/electron-react-typescript",
   "devDependencies": {
     "@babel/core": "^7.4.5",
     "@babel/plugin-proposal-class-properties": "^7.4.4",
@@ -94,7 +62,6 @@
     "@babel/preset-typescript": "^7.3.3",
     "@hot-loader/react-dom": "^16.8.6",
     "@types/electron-devtools-installer": "^2.2.0",
-    "@types/jest": "^24.0.13",
     "@types/react": "^16.8.18",
     "@types/react-dom": "^16.8.4",
     "@types/react-test-renderer": "^16.8.1",
@@ -121,7 +88,6 @@
     "html-webpack-plugin": "^3.2.0",
     "husky": "^4.2.1",
     "image-webpack-loader": "^4.6.0",
-    "jest": "^24.8.0",
     "lint-staged": "^10.0.7",
     "node-sass": "^4.12.0",
     "prettier": "^1.18.2",
@@ -131,7 +97,6 @@
     "source-map-loader": "^0.2.4",
     "spectron": "^5.0.0",
     "style-loader": "^0.23.1",
-    "ts-jest": "^24.0.2",
     "typescript": "^3.4.5",
     "webpack": "^4.32.2",
     "webpack-cli": "^3.3.2",
