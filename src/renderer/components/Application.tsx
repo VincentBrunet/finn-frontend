@@ -1,4 +1,3 @@
-import { hot } from 'react-hot-loader/root';
 import * as React from 'react';
 
 interface WelcomeProps {
@@ -7,18 +6,16 @@ interface WelcomeProps {
 
 class Welcome extends React.Component<WelcomeProps> {
   render() {
-    return <h1>Bonjour, {this.props.name}</h1>;
+    return <div>Bonjour2, {this.props.name}</div>;
   }
 }
 
-class Application extends React.Component {
+export class Application extends React.Component {
   render() {
     return (
       <div>
-        <Welcome name={'vincent'} />
+        <Welcome name={'vincent2'} />
       </div>
     );
   }
 }
-
-export default hot(Application);
