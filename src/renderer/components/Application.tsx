@@ -14,7 +14,7 @@ export class Application extends React.Component {
   render() {
     return (
       <div>
-        <Welcome name={'vincent2'} />
+        <Welcome name={'vincent5'} />
       </div>
     );
   }

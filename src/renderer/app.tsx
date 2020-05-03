@@ -1,8 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
-import { AppContainer } from 'react-hot-loader';
-
 import { Application } from './components/Application';
 
 // Create main element
@@ -11,12 +9,7 @@ document.body.appendChild(mainElement);
 
 // Render components
 const render = () => {
-  ReactDOM.render(
-    <AppContainer>
-      <Application />
-    </AppContainer>,
-    mainElement
-  );
+  ReactDOM.render(<Application />, mainElement);
 };
 
 render();
