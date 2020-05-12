@@ -1,5 +1,9 @@
 import * as React from 'react';
 
+import { ScreenerTable } from './ScreenerTable';
+
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 interface WelcomeProps {
   name: string;
 }
@@ -15,6 +19,7 @@ export class Application extends React.Component {
     return (
       <div>
         <Welcome name="vincent" />
+        <ScreenerTable />
       </div>
     );
   }
