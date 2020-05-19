@@ -1,26 +1,17 @@
 import * as React from 'react';
 
-import { ScreenerTable } from './ScreenerTable';
+import { BrowserRouter } from 'react-router-dom';
 
-import 'bootstrap/dist/css/bootstrap.min.css';
-
-interface WelcomeProps {
-  name: string;
-}
-
-class Welcome extends React.Component<WelcomeProps> {
-  render() {
-    return <div>Bonjour, {this.props.name}</div>;
-  }
-}
+import { Navigation } from './Navigation';
+import { Navigated } from './Navigated';
 
 export class Application extends React.Component {
   render() {
     return (
-      <div>
-        <Welcome name="vincent" />
-        <ScreenerTable />
-      </div>
+      <BrowserRouter>
+        <Navigation />
+        <Navigated />
+      </BrowserRouter>
     );
   }
 }

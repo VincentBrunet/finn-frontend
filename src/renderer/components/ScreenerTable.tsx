@@ -2,9 +2,11 @@ import axios from 'axios';
 
 import * as React from 'react';
 
+import { RouteComponentProps } from 'react-router-dom';
+
 import Table from 'react-bootstrap/Table';
 
-interface ScreenerTableProps {}
+interface ScreenerTableProps extends RouteComponentProps {}
 interface ScreenerTableState {
   columns: any[];
   rows: any[][];
@@ -48,6 +50,7 @@ export class ScreenerTable extends React.Component<ScreenerTableProps, ScreenerT
   };
 
   render() {
+    console.log('PROPS', this.props);
     return (
       <div
         style={{
@@ -84,7 +87,7 @@ export class ScreenerTable extends React.Component<ScreenerTableProps, ScreenerT
                         <td key="name">{column.name}</td>
                       ];
                     } else {
-                      return <td key={rowIdx + ':' + columnIdx}>{JSON.stringify(column)}</td>;
+                      return <td key={rowIdx + ':' + columnIdx}>{column}</td>;
                     }
                   })}
                 </tr>
