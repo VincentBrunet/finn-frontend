@@ -2,15 +2,19 @@ import * as React from 'react';
 
 import { BrowserRouter } from 'react-router-dom';
 
-import { Navigation } from './Navigation';
-import { Navigated } from './Navigated';
+import { Navigation } from './navigation/Navigation';
+import { Navigated } from './navigation/Navigated';
 
-export class Application extends React.Component {
-  render() {
+import { Component } from './Component';
+import { ScreenerTable } from './pages/ScreenerTable';
+
+export class Application extends Component {
+  onRender() {
     return (
       <BrowserRouter>
         <Navigation />
         <Navigated />
+        <ScreenerTable />
       </BrowserRouter>
     );
   }

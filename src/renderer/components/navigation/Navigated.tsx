@@ -3,10 +3,12 @@ import * as React from 'react';
 import { Route } from 'react-router-dom';
 import { Switch } from 'react-router-dom';
 
-import { ScreenerTable } from './ScreenerTable';
+import { ScreenerTable } from '../pages/ScreenerTable';
 
-export class Navigated extends React.Component {
-  render() {
+import { Component } from '../Component';
+
+export class Navigated extends Component {
+  onRender() {
     return (
       <Switch>
         <Route path="/hello">Hello</Route>

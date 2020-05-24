@@ -2,8 +2,10 @@ import * as React from 'react';
 
 import { Link } from 'react-router-dom';
 
-export class Navigation extends React.Component {
-  render() {
+import { Component } from '../Component';
+
+export class Navigation extends Component {
+  onRender() {
     return (
       <ul>
         <li>
