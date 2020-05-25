@@ -8,40 +8,52 @@ import { Component } from '../Component';
 
 interface ScreenerTableProps {}
 interface ScreenerTableState {
-  rows?: TableCell[][];
+  head?: TableCell[];
+  body?: TableCell[][];
 }
 
 export class ScreenerTable extends Component<ScreenerTableProps, ScreenerTableState> {
   async onUpdateProps() {
-    console.log('OnUpdateProps', this.props);
-    const result = await axios.get('http://127.0.0.1:3000/screener/table');
-    console.log(result.data);
-    const data = result.data.data;
-    const cells: TableCell[][] = [];
-    const header = ['Ticker', 'Name'];
-    for (const column of data.columns) {
-      header.push(column.metric.identifier);
+    const apiResult = await axios.get('http://127.0.0.1:3000/screener/table');
+    const apiData = apiResult.data.data;
+    const apiColumns = apiData.columns;
+    const apiRows = apiData.rows;
+
+    const head: TableCell[] = [{ value: 'id' }, { value: 'Ticker' }, { value: 'Name' }];
+    for (const apiColumn of apiColumns) {
+      head.push({ value: apiColumn?.metric?.name });
     }
-    cells.push(header);
-    for (const row of data.rows) {
-      const localCell = [];
-      for (let i = 0; i < row.length; i++) {
-        const column = row[i];
+
+    const body: TableCell[][] = [];
+    for (const apiRow of apiRows) {
+      const cells: TableCell[] = [];
+      for (let i = 0; i < apiRow.length; i++) {
+        const apiCell = apiRow[i];
         if (i === 0) {
-          localCell.push(column.symbol);
-          localCell.push(column.name);
+          cells.push({ value: apiCell.id });
+          cells.push({ value: apiCell.code });
+          cells.push({ value: apiCell.name });
         } else {
-          localCell.push(column);
+          if (apiCell) {
+            cells.push({
+              value: apiCell.value,
+              unit: apiCell.unit.symbol ?? apiCell.unit.code
+            });
+          } else {
+            cells.push({});
+          }
         }
       }
-      cells.push(localCell);
+      body.push(cells);
     }
+
     this.setState({
-      rows: cells
+      head: head,
+      body: body
     });
   }
 
   onRender() {
-    return <Table rows={this.state?.rows} />;
+    return <Table head={this.state?.head} body={this.state?.body} />;
   }
 }

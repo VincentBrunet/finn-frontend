@@ -1,8 +1,11 @@
 import * as React from 'react';
 
+export interface ComponentProps {}
+export interface ComponentState {}
+
 export abstract class Component<
-  Props = any | undefined,
-  State = any | undefined
+  Props = ComponentProps,
+  State = ComponentState
 > extends React.Component<Props, State> {
   onRender(): React.ReactNode {
     return undefined;
@@ -16,10 +19,14 @@ export abstract class Component<
   onUpdateState() {}
 
   componentDidMount() {
-    this.onCreate();
-    this.onUpdateProps();
-    this.onUpdateState();
-    this.onUpdate();
+    try {
+      this.onCreate();
+      this.onUpdateProps();
+      this.onUpdateState();
+      this.onUpdate();
+    } catch (e) {
+      console.log('Could not mount', e);
+    }
   }
   componentWillUnmount() {
     this.onDestroy();
@@ -65,6 +72,6 @@ export abstract class Component<
     this.onUpdate();
   }
   render() {
-    return this.onRender();
+    return this.onRender() ?? [];
   }
 }

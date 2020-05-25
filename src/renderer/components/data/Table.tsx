@@ -2,11 +2,15 @@ import * as React from 'react';
 
 import { Component } from '../Component';
 
-import BoostrapTable from 'react-bootstrap/Table';
+import * as ReactBoostrap from 'react-bootstrap';
 
-export type TableCell = number | string;
+export interface TableCell {
+  value?: number | string;
+  unit?: string;
+}
 export interface TableProps {
-  rows?: TableCell[][];
+  head?: TableCell[];
+  body?: TableCell[][];
 }
 
 interface TableState {
@@ -18,47 +22,49 @@ export class Table extends Component<TableProps, TableState> {
   onClickCell = (column: number) => {
     this.setState({
       sortIndex: column,
-      sortReverse: this.state.sortIndex === column && !this.state.sortReverse
+      sortReverse: this.state?.sortIndex === column && this.state?.sortReverse === false
     });
   };
 
   onRender() {
-    let rows = this.props.rows || [];
+    let body = this.props.body || [];
     // Sorting optionally
     const sortIndex = this.state?.sortIndex;
     const sortReverse = this.state?.sortReverse;
     if (sortIndex != undefined) {
-      rows = [...rows];
-      rows.sort((a, b) => {
-        const av = a[sortIndex];
-        const bv = b[sortIndex];
-        let index = 0;
+      body = [...body];
+      body.sort((a, b) => {
+        const av = a[sortIndex].value;
+        const bv = b[sortIndex].value;
+        let diff = 0;
         if (typeof av === 'string' && typeof bv === 'string') {
-          index = av.localeCompare(bv);
+          diff = av.localeCompare(bv);
         } else if (typeof av === 'number' && typeof bv === 'number') {
-          index = av - bv;
+          diff = av - bv;
         } else {
-          index = +av - +bv;
+          diff = +(av ?? 0) - +(bv ?? 0);
         }
         if (sortReverse) {
-          index = -index;
+          diff = -diff;
         }
-        return index;
+        return diff;
       });
     }
     // Render
     return (
-      <BoostrapTable striped bordered hover size="sm" variant="dark">
-        <thead>{rows.slice(0, 1).map(this.onRenderHead)}</thead>
-        <tbody>{rows.slice(1).map(this.onRenderBody)}</tbody>
-      </BoostrapTable>
+      <ReactBoostrap.Table striped bordered hover size="sm" variant="dark">
+        <thead>{this.onRenderHead(this.props.head)}</thead>
+        <tbody>{body.map(this.onRenderBody)}</tbody>
+      </ReactBoostrap.Table>
     );
   }
-  onRenderHead = (row: TableCell[], index: number) => {
-    return <tr key={index}>{this.onRenderCells(row, true)}</tr>;
+  onRenderHead = (cells?: TableCell[]) => {
+    if (cells) {
+      return <tr>{this.onRenderCells(cells, true)}</tr>;
+    }
   };
-  onRenderBody = (row: TableCell[], index: number) => {
-    return <tr key={index}>{this.onRenderCells(row, false)}</tr>;
+  onRenderBody = (cells: TableCell[], index: number) => {
+    return <tr key={index}>{this.onRenderCells(cells, false)}</tr>;
   };
   onRenderCells(cells: TableCell[], clickable: boolean) {
     return cells.map((cell, index) => {
@@ -67,7 +73,12 @@ export class Table extends Component<TableProps, TableState> {
   }
   onRenderCell(cell: TableCell, index: number, clickable: boolean) {
     if (!clickable) {
-      return <td key={index}>{cell?.toString()}</td>;
+      return (
+        <td key={index}>
+          {cell?.value?.toString()}
+          {cell?.unit}
+        </td>
+      );
     }
     return (
       <th
@@ -76,7 +87,8 @@ export class Table extends Component<TableProps, TableState> {
           this.onClickCell(index);
         }}
       >
-        {cell?.toString()}
+        {cell?.value?.toString()}
+        {cell?.unit}
       </th>
     );
   }
