@@ -3,7 +3,7 @@ export class Numbers {
   static million = 1000 * Numbers.thousand;
   static billion = 1000 * Numbers.million;
   static trillion = 1000 * Numbers.billion;
-  static chooseDivisor(values: number[]) {
+  static chooseArrayDivisor(values: number[]) {
     const min = Math.min.apply(Math, values);
     const max = Math.max.apply(Math, values);
     if (min < -10 * Numbers.trillion) {

@@ -6,6 +6,10 @@ import { Table, TableCell } from '../data/Table';
 
 import { Component } from '../Component';
 
+import { Strings } from '../../services/utils/Strings';
+
+import { Container } from 'react-bootstrap';
+
 interface ScreenerTableProps {}
 interface ScreenerTableState {
   head?: TableCell[];
@@ -19,9 +23,9 @@ export class ScreenerTable extends Component<ScreenerTableProps, ScreenerTableSt
     const apiColumns = apiData.columns;
     const apiRows = apiData.rows;
 
-    const head: TableCell[] = [{ value: 'id' }, { value: 'Ticker' }, { value: 'Name' }];
+    const head: TableCell[] = [{ text: 'Ticker' }, { text: 'Name' }];
     for (const apiColumn of apiColumns) {
-      head.push({ value: apiColumn?.metric?.name });
+      head.push({ text: apiColumn?.metric?.name });
     }
 
     const body: TableCell[][] = [];
@@ -30,13 +34,12 @@ export class ScreenerTable extends Component<ScreenerTableProps, ScreenerTableSt
       for (let i = 0; i < apiRow.length; i++) {
         const apiCell = apiRow[i];
         if (i === 0) {
-          cells.push({ value: apiCell.id });
-          cells.push({ value: apiCell.code });
-          cells.push({ value: apiCell.name });
+          cells.push({ text: apiCell.code });
+          cells.push({ text: Strings.ellipsis(apiCell.name, 32) });
         } else {
           if (apiCell) {
             cells.push({
-              value: apiCell.value,
+              number: apiCell.value,
               unit: apiCell.unit.symbol ?? apiCell.unit.code
             });
           } else {
@@ -54,6 +57,10 @@ export class ScreenerTable extends Component<ScreenerTableProps, ScreenerTableSt
   }
 
   onRender() {
-    return <Table head={this.state?.head} body={this.state?.body} />;
+    return (
+      <Container>
+        <Table head={this.state?.head} body={this.state?.body} />
+      </Container>
+    );
   }
 }

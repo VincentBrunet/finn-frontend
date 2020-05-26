@@ -4,8 +4,11 @@ import { Component } from '../Component';
 
 import * as ReactBoostrap from 'react-bootstrap';
 
+import { Numbers } from '../../services/utils/Numbers';
+
 export interface TableCell {
-  value?: number | string;
+  text?: string;
+  number?: number;
   unit?: string;
 }
 export interface TableProps {
@@ -34,15 +37,15 @@ export class Table extends Component<TableProps, TableState> {
     if (sortIndex != undefined) {
       body = [...body];
       body.sort((a, b) => {
-        const av = a[sortIndex].value;
-        const bv = b[sortIndex].value;
+        const av = a[sortIndex];
+        const bv = b[sortIndex];
         let diff = 0;
-        if (typeof av === 'string' && typeof bv === 'string') {
-          diff = av.localeCompare(bv);
-        } else if (typeof av === 'number' && typeof bv === 'number') {
-          diff = av - bv;
+        if (av.text !== undefined && bv.text !== undefined) {
+          diff = av.text.localeCompare(bv.text);
+        } else if (av.number !== undefined && bv.number !== undefined) {
+          diff = av.number - bv.number;
         } else {
-          diff = +(av ?? 0) - +(bv ?? 0);
+          diff = +(av.number ?? 0) - +(bv.number ?? 0);
         }
         if (sortReverse) {
           diff = -diff;
@@ -52,7 +55,7 @@ export class Table extends Component<TableProps, TableState> {
     }
     // Render
     return (
-      <ReactBoostrap.Table striped bordered hover size="sm" variant="dark">
+      <ReactBoostrap.Table striped bordered hover size="sm" className="text-monospace">
         <thead>{this.onRenderHead(this.props.head)}</thead>
         <tbody>{body.map(this.onRenderBody)}</tbody>
       </ReactBoostrap.Table>
@@ -72,24 +75,34 @@ export class Table extends Component<TableProps, TableState> {
     });
   }
   onRenderCell(cell: TableCell, index: number, clickable: boolean) {
-    if (!clickable) {
-      return (
-        <td key={index}>
-          {cell?.value?.toString()}
-          {cell?.unit}
-        </td>
-      );
+    let onClick: (() => void) | undefined = undefined;
+    if (clickable) {
+      onClick = () => {
+        this.onClickCell(index);
+      };
     }
+    const Tag = clickable ? 'th' : 'td';
     return (
-      <th
-        key={index}
-        onClick={() => {
-          this.onClickCell(index);
+      <Tag
+        style={{
+          whiteSpace: 'nowrap',
+          textOverflow: 'ellipsis',
+          textAlign: cell.number !== undefined ? 'right' : undefined
         }}
+        key={index}
+        onClick={onClick}
       >
-        {cell?.value?.toString()}
-        {cell?.unit}
-      </th>
+        {this.onRenderText(cell)}
+      </Tag>
     );
+  }
+  onRenderText(cell: TableCell) {
+    const text = cell.text ?? '';
+    const unit = cell.unit ?? '';
+    let number = '';
+    if (cell.number !== undefined) {
+      number = cell.number.toLocaleString();
+    }
+    return text + number + ' ' + unit;
   }
 }

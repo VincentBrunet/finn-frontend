@@ -14,11 +14,12 @@ import {
 } from 'recharts';
 
 export interface ChartLinePoint {
-  x: number | string;
+  x: number;
   y: number;
 }
 export interface ChartLineSerie {
   name: string;
+  unit?: string;
   points: ChartLinePoint[];
 }
 export interface ChartLineProps {
@@ -54,6 +55,7 @@ export class ChartLine extends Component<ChartLineProps, ChartLineState> {
             <Line
               isAnimationActive={false}
               dataKey="y"
+              unit={' ' + s.unit ?? ''}
               data={s.points}
               name={s.name}
               key={s.name}

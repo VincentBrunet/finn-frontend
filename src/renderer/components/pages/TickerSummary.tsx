@@ -30,7 +30,9 @@ export class TickerSummary extends Component<TickerSummaryProps, TickerSummarySt
         return value.value;
       });
 
-      const divisor = Numbers.chooseDivisor(ys);
+      const divisor = Numbers.chooseArrayDivisor(ys);
+
+      console.log('divisor', divisor);
 
       const name = chart.metric.name;
       const category = chart.metric.category;
@@ -48,7 +50,18 @@ export class TickerSummary extends Component<TickerSummaryProps, TickerSummarySt
         note = `(${note})`;
       }
 
+      let units = new Set<string>();
+      console.log('units', units);
+
+      for (let i = 0; i < chart.values.length; i++) {
+        const value = chart.values[i];
+        units.add(value.unit);
+      }
+
+      console.log('units', units);
+
       const serie: ChartLineSerie = {
+        unit: [...units].join(','),
         name: `[${category}] ${name} ${note}`,
         points: chart.values.map((value: any) => {
           return {
@@ -59,17 +72,7 @@ export class TickerSummary extends Component<TickerSummaryProps, TickerSummarySt
       };
 
       serie.points.sort((a, b) => {
-        const av = a.x;
-        const bv = b.x;
-        let diff = 0;
-        if (typeof av === 'string' && typeof bv === 'string') {
-          diff = av.localeCompare(bv);
-        } else if (typeof av === 'number' && typeof bv === 'number') {
-          diff = av - bv;
-        } else {
-          diff = +av - +bv;
-        }
-        return diff;
+        return a.x - b.x;
       });
 
       charts.push(serie);
@@ -82,7 +85,7 @@ export class TickerSummary extends Component<TickerSummaryProps, TickerSummarySt
 
   onRender() {
     return (
-      <Container fluid>
+      <Container>
         <Row style={{ margin: '10px 0' }}>
           {this.state?.charts?.map((chart, index) => {
             return (
