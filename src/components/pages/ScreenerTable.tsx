@@ -1,12 +1,11 @@
-import axios from 'axios';
+import * as React from "react";
 
-import * as React from 'react';
+import { Table, TableCell } from "../data/Table";
 
-import { Table, TableCell } from '../data/Table';
+import { Component } from "../Component";
 
-import { Component } from '../Component';
-
-import { Strings } from '../../services/utils/Strings';
+import { Strings } from "../../services/utils/Strings";
+import { Api } from "../../services/utils/Api";
 
 interface ScreenerTableProps {}
 interface ScreenerTableState {
@@ -14,14 +13,16 @@ interface ScreenerTableState {
   body?: TableCell[][];
 }
 
-export class ScreenerTable extends Component<ScreenerTableProps, ScreenerTableState> {
+export class ScreenerTable extends Component<
+  ScreenerTableProps,
+  ScreenerTableState
+> {
   async onUpdateProps() {
-    const apiResult = await axios.get('http://127.0.0.1:3000/screener/table');
-    const apiData = apiResult.data.data;
+    const apiData = await Api.getScreenerTable();
     const apiColumns = apiData.columns;
     const apiRows = apiData.rows;
 
-    const head: TableCell[] = [{ text: 'Ticker' }, { text: 'Name' }];
+    const head: TableCell[] = [{ text: "Ticker" }, { text: "Name" }];
     for (const apiColumn of apiColumns) {
       head.push({ text: apiColumn?.metric?.name });
     }
@@ -32,7 +33,7 @@ export class ScreenerTable extends Component<ScreenerTableProps, ScreenerTableSt
       for (let i = 0; i < apiRow.length; i++) {
         const apiCell = apiRow[i];
         if (i === 0) {
-          cells.push({ text: apiCell.code + '.' + apiCell.country });
+          cells.push({ text: apiCell.code + "." + apiCell.country });
           cells.push({ text: Strings.ellipsis(apiCell.name, 32) });
         } else {
           if (apiCell) {

@@ -1,5 +1,3 @@
-import axios from "axios";
-
 import * as React from "react";
 
 import { Component } from "../Component";
@@ -12,6 +10,7 @@ import { Container, Row, Col, Card } from "react-bootstrap";
 
 import moment from "moment";
 
+import { Api } from "../../services/utils/Api";
 import { Numbers } from "../../services/utils/Numbers";
 
 import { RouteComponentProps } from "react-router-dom";
@@ -26,10 +25,7 @@ export class TickerSummary extends Component<
   TickerSummaryState
 > {
   async onUpdateProps() {
-    const result = await axios.get(
-      "http://127.0.0.1:3000/ticker/summary/" + this.props.match.params.code
-    );
-    const data = result.data.data;
+    const data = await Api.getTickerSummary(this.props.match.params.code);
 
     const charts: ChartLineSerie[] = [];
     for (const chart of data.charts) {

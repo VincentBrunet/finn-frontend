@@ -8,32 +8,22 @@ export interface ChartBaseProps {
   config: Chart.ChartConfiguration;
 }
 
-interface ChartBaseState {
-  id: string;
-}
-
-export class ChartBase extends Component<ChartBaseProps, ChartBaseState> {
+export class ChartBase extends Component<ChartBaseProps> {
   private static _id = 0;
 
-  private unique?: string;
+  private id = "chartbase-" + (ChartBase._id++).toString(16);
+
   private chart?: Chart;
 
-  onAlloc() {
-    this.state = {
-      id: "chartbase-" + (ChartBase._id++).toString(16),
-    };
-  }
-  onCreate() {
-    this.chart = new Chart(this.state.id, this.props.config);
-  }
   onUpdate() {
-    if (this.chart) {
+    if (!this.chart) {
+      this.chart = new Chart(this.id, this.props.config);
+    } else {
       this.chart.config = this.props.config;
       this.chart.update();
     }
   }
   onRender() {
-    return <canvas id={this.state.id} />;
+    return <canvas id={this.id} />;
   }
-  onDestroy() {}
 }
