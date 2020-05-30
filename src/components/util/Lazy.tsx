@@ -1,6 +1,6 @@
-import * as React from 'react';
+import * as React from "react";
 
-import { Component } from '../Component';
+import { Component } from "../Component";
 
 export interface LazyProps {
   width: string;
@@ -61,7 +61,14 @@ export class Lazy extends Component<LazyProps, LazyState> {
 
   onRender() {
     return (
-      <div ref={this.onRef} style={{ width: this.props.width, height: this.props.height }}>
+      <div
+        ref={this.onRef}
+        style={{
+          position: "relative",
+          width: this.props.width,
+          height: this.props.height,
+        }}
+      >
         {this.state?.visible ? this.props.children : undefined}
       </div>
     );

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from "react";
 
 export interface ComponentProps {}
 export interface ComponentState {}
@@ -7,10 +7,16 @@ export abstract class Component<
   Props = ComponentProps,
   State = ComponentState
 > extends React.Component<Props, State> {
+  constructor(props: Readonly<Props>) {
+    super(props);
+    this.safe(this.onAlloc);
+  }
+
   onRender(): React.ReactNode {
     return undefined;
   }
 
+  onAlloc() {}
   onCreate() {}
   onDestroy() {}
 
@@ -18,27 +24,34 @@ export abstract class Component<
   onUpdateProps() {}
   onUpdateState() {}
 
-  componentDidMount() {
+  async safe(cb: () => void) {
     try {
-      this.onCreate();
-      this.onUpdateProps();
-      this.onUpdateState();
-      this.onUpdate();
+      await cb.call(this);
     } catch (e) {
-      console.log('Could not mount', e);
+      console.log("Error", e);
     }
   }
-  componentWillUnmount() {
-    this.onDestroy();
+
+  componentDidMount() {
+    this.safe(this.onCreate);
+    this.safe(this.onUpdateProps);
+    this.safe(this.onUpdateState);
+    this.safe(this.onUpdate);
   }
-  shouldComponentUpdate(nextProps: Readonly<Props>, nextState: Readonly<State>) {
+  componentWillUnmount() {
+    this.safe(this.onDestroy);
+  }
+  shouldComponentUpdate(
+    nextProps: Readonly<Props>,
+    nextState: Readonly<State>
+  ) {
     for (const key in nextProps) {
       const value = nextProps[key];
       if (value !== this.props[key]) {
         return true;
       }
     }
-    if ((nextState === null) != (this.state === null)) {
+    if ((nextState === null) !== (this.state === null)) {
       return true;
     } else {
       for (const key in nextState) {
@@ -54,24 +67,29 @@ export abstract class Component<
     for (const key in prevProps) {
       const value = prevProps[key];
       if (value !== this.props[key]) {
-        this.onUpdateProps();
+        this.safe(this.onUpdateProps);
         break;
       }
     }
-    if ((prevState === null) != (this.state === null)) {
+    if ((prevState === null) !== (this.state === null)) {
       this.onUpdateState();
     } else {
       for (const key in prevState) {
         const value = prevState[key];
         if (value !== this.state[key]) {
-          this.onUpdateState();
+          this.safe(this.onUpdateState);
           break;
         }
       }
     }
-    this.onUpdate();
+    this.safe(this.onUpdate);
   }
   render() {
-    return this.onRender() ?? [];
+    try {
+      return this.onRender() ?? [];
+    } catch (e) {
+      console.log("Error", e);
+      return [];
+    }
   }
 }

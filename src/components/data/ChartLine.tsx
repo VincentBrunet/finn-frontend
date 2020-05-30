@@ -1,8 +1,8 @@
-import * as React from 'react';
+import * as React from "react";
 
-import { Chart } from 'canvasjs';
+import { Component } from "../Component";
 
-import { Component } from '../Component';
+import { ChartBase } from "./ChartBase";
 
 export interface ChartLinePoint {
   x: number;
@@ -14,7 +14,7 @@ export interface ChartLineSerie {
   points: ChartLinePoint[];
 }
 export interface ChartLineProps {
-  series?: ChartLineSerie[];
+  serie?: ChartLineSerie;
   formatter?: (value: string | number) => string;
 }
 
@@ -22,43 +22,75 @@ interface ChartLineState {}
 
 export class ChartLine extends Component<ChartLineProps, ChartLineState> {
   onRender() {
-    const count = this.props.series?.length ?? 0;
-    if (count <= 0) {
+    const serie = this.props.serie;
+    const formatter = this.props.formatter;
+    if (!serie) {
       return undefined;
     }
-    return <div />;
-    /*
     return (
-      <ResponsiveContainer debounce={100}>
-        <LineChart>
-          <CartesianGrid strokeDasharray="3 3" vertical={false} />
-          <XAxis dataKey="x" hide={true} />
-          <YAxis dataKey="y" />
-          <Tooltip
-            isAnimationActive={false}
-            labelFormatter={this.props.formatter}
-            wrapperStyle={{ zIndex: 1000 }}
-            allowEscapeViewBox={{
-              x: false,
-              y: true,
-            }}
-          />
-          {count > 1 ? <Legend /> : undefined}
-          {this.props.series?.map((s) => (
-            <Line
-              isAnimationActive={false}
-              dataKey="y"
-              unit={' ' + s.unit ?? ''}
-              data={s.points}
-              name={s.name}
-              key={s.name}
-              strokeWidth={2}
-              dot={false}
-            />
-          ))}
-        </LineChart>
-      </ResponsiveContainer>
+      <ChartBase
+        config={{
+          type: "line",
+          data: {
+            datasets: [
+              {
+                borderColor: "#3AA3BB",
+                backgroundColor: "#3AA3BB",
+                label: serie.name,
+                pointRadius: 0,
+                pointBorderWidth: 0,
+                pointBorderColor: "transparent",
+                data: serie.points.map((point) => {
+                  return point.y;
+                }),
+                fill: false,
+                lineTension: 0,
+              },
+            ],
+            labels: serie.points.map((point) => {
+              return formatter ? formatter(point.x) : point.x;
+            }),
+          },
+          options: {
+            legend: {
+              display: false,
+            },
+            scales: {
+              yAxes: [
+                {
+                  ticks: {
+                    fontColor: "white",
+                    callback: function (value, index, values) {
+                      return value + " " + serie.unit;
+                    },
+                  },
+                },
+              ],
+              xAxes: [
+                {
+                  type: "time",
+                  ticks: {
+                    fontColor: "white",
+                  },
+                },
+              ],
+            },
+            tooltips: {
+              intersect: false,
+              mode: "index",
+            },
+            animation: {
+              duration: 0,
+            },
+            responsive: true,
+            maintainAspectRatio: false,
+            hover: {
+              intersect: false,
+              animationDuration: 0,
+            },
+          },
+        }}
+      />
     );
-    */
   }
 }

@@ -8,8 +8,6 @@ import { Component } from '../Component';
 
 import { Strings } from '../../services/utils/Strings';
 
-import { Container } from 'react-bootstrap';
-
 interface ScreenerTableProps {}
 interface ScreenerTableState {
   head?: TableCell[];
@@ -34,13 +32,13 @@ export class ScreenerTable extends Component<ScreenerTableProps, ScreenerTableSt
       for (let i = 0; i < apiRow.length; i++) {
         const apiCell = apiRow[i];
         if (i === 0) {
-          cells.push({ text: apiCell.code });
+          cells.push({ text: apiCell.code + '.' + apiCell.country });
           cells.push({ text: Strings.ellipsis(apiCell.name, 32) });
         } else {
           if (apiCell) {
             cells.push({
               number: apiCell.value,
-              unit: apiCell.unit.symbol ?? apiCell.unit.code
+              unit: apiCell.unit.symbol ?? apiCell.unit.code,
             });
           } else {
             cells.push({});
@@ -52,15 +50,11 @@ export class ScreenerTable extends Component<ScreenerTableProps, ScreenerTableSt
 
     this.setState({
       head: head,
-      body: body
+      body: body,
     });
   }
 
   onRender() {
-    return (
-      <Container>
-        <Table head={this.state?.head} body={this.state?.body} />
-      </Container>
-    );
+    return <Table head={this.state?.head} body={this.state?.body} />;
   }
 }

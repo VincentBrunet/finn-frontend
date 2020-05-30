@@ -1,10 +1,6 @@
-import * as React from 'react';
+import * as React from "react";
 
-import { Component } from '../Component';
-
-import * as ReactBoostrap from 'react-bootstrap';
-
-import { Numbers } from '../../services/utils/Numbers';
+import { Component } from "../Component";
 
 export interface TableCell {
   text?: string;
@@ -25,7 +21,8 @@ export class Table extends Component<TableProps, TableState> {
   onClickCell = (column: number) => {
     this.setState({
       sortIndex: column,
-      sortReverse: this.state?.sortIndex === column && this.state?.sortReverse === false
+      sortReverse:
+        this.state?.sortIndex === column && this.state?.sortReverse === false,
     });
   };
 
@@ -34,7 +31,7 @@ export class Table extends Component<TableProps, TableState> {
     // Sorting optionally
     const sortIndex = this.state?.sortIndex;
     const sortReverse = this.state?.sortReverse;
-    if (sortIndex != undefined) {
+    if (sortIndex !== undefined) {
       body = [...body];
       body.sort((a, b) => {
         const av = a[sortIndex];
@@ -55,10 +52,10 @@ export class Table extends Component<TableProps, TableState> {
     }
     // Render
     return (
-      <ReactBoostrap.Table striped bordered hover size="sm" className="text-monospace">
+      <table>
         <thead>{this.onRenderHead(this.props.head)}</thead>
         <tbody>{body.map(this.onRenderBody)}</tbody>
-      </ReactBoostrap.Table>
+      </table>
     );
   }
   onRenderHead = (cells?: TableCell[]) => {
@@ -81,13 +78,13 @@ export class Table extends Component<TableProps, TableState> {
         this.onClickCell(index);
       };
     }
-    const Tag = clickable ? 'th' : 'td';
+    const Tag = clickable ? "th" : "td";
     return (
       <Tag
         style={{
-          whiteSpace: 'nowrap',
-          textOverflow: 'ellipsis',
-          textAlign: cell.number !== undefined ? 'right' : undefined
+          whiteSpace: "nowrap",
+          textOverflow: "ellipsis",
+          textAlign: cell.number !== undefined ? "right" : undefined,
         }}
         key={index}
         onClick={onClick}
@@ -97,12 +94,12 @@ export class Table extends Component<TableProps, TableState> {
     );
   }
   onRenderText(cell: TableCell) {
-    const text = cell.text ?? '';
-    const unit = cell.unit ?? '';
-    let number = '';
+    const text = cell.text ?? "";
+    const unit = cell.unit ?? "";
+    let number = "";
     if (cell.number !== undefined) {
       number = cell.number.toLocaleString();
     }
-    return text + number + ' ' + unit;
+    return text + number + " " + unit;
   }
 }

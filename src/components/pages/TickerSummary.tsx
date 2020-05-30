@@ -1,29 +1,33 @@
-import axios from 'axios';
+import axios from "axios";
 
-import * as React from 'react';
+import * as React from "react";
 
-import { Component } from '../Component';
+import { Component } from "../Component";
 
-import { Lazy } from '../util/Lazy';
+import { Lazy } from "../util/Lazy";
 
-import { ChartLine, ChartLineSerie } from '../data/ChartLine';
+import { ChartLine, ChartLineSerie } from "../data/ChartLine";
 
-import { Container, Row, Col, Card } from 'react-bootstrap';
+import { Container, Row, Col, Card } from "react-bootstrap";
 
-import * as moment from 'moment';
+import moment from "moment";
 
-import { Numbers } from '../../services/utils/Numbers';
-import { RouteComponentProps } from 'react-router-dom';
+import { Numbers } from "../../services/utils/Numbers";
 
-interface TickerSummaryProps extends RouteComponentProps {}
+import { RouteComponentProps } from "react-router-dom";
+
+interface TickerSummaryProps extends RouteComponentProps<{ code: string }> {}
 interface TickerSummaryState {
   charts?: ChartLineSerie[];
 }
 
-export class TickerSummary extends Component<TickerSummaryProps, TickerSummaryState> {
+export class TickerSummary extends Component<
+  TickerSummaryProps,
+  TickerSummaryState
+> {
   async onUpdateProps() {
     const result = await axios.get(
-      'http://127.0.0.1:3000/ticker/summary/' + this.props.match.params.code
+      "http://127.0.0.1:3000/ticker/summary/" + this.props.match.params.code
     );
     const data = result.data.data;
 
@@ -35,36 +39,30 @@ export class TickerSummary extends Component<TickerSummaryProps, TickerSummarySt
 
       const divisor = Numbers.chooseArrayDivisor(ys);
 
-      console.log('divisor', divisor);
-
       const name = chart.metric.name;
       const category = chart.metric.category;
-      let note = '';
+      let note = "";
       if (divisor === Numbers.trillion) {
-        note = 'Trillions';
+        note = "Trillions";
       } else if (divisor === Numbers.billion) {
-        note = 'Billions';
+        note = "Billions";
       } else if (divisor === Numbers.million) {
-        note = 'Millions';
+        note = "Millions";
       } else if (divisor === Numbers.thousand) {
-        note = 'Thousands';
+        note = "Thousands";
       }
       if (note) {
         note = `(${note})`;
       }
 
       let units = new Set<string>();
-      console.log('units', units);
-
       for (let i = 0; i < chart.values.length; i++) {
         const value = chart.values[i];
         units.add(value.unit);
       }
 
-      console.log('units', units);
-
       const serie: ChartLineSerie = {
-        unit: [...units].join(','),
+        unit: [...units].join(","),
         name: `[${category}] ${name} ${note}`,
         points: chart.values.map((value: any) => {
           return {
@@ -88,22 +86,28 @@ export class TickerSummary extends Component<TickerSummaryProps, TickerSummarySt
 
   onRender() {
     return (
-      <Container>
-        <Row style={{ margin: '10px 0' }}>
+      <Container
+        style={{
+          backgroundColor: "#1E264F",
+        }}
+      >
+        <Row style={{ margin: "10px 0" }}>
           {this.state?.charts?.map((chart, index) => {
             return (
               <Col xs={12} md={6} xl={4} key={index}>
                 <Card
                   body
                   style={{
-                    boxShadow: '0 8px 11px rgba(0,0,0,0.1)',
-                    margin: '10px 0',
+                    boxShadow: "0 8px 11px rgba(0,0,0,0.1)",
+                    backgroundColor: "#133D9C",
+                    color: "white",
+                    margin: "10px 0",
                   }}
                 >
                   <Card.Text>{chart.name}</Card.Text>
                   <Lazy width="100%" height="150px">
                     <ChartLine
-                      series={[chart]}
+                      serie={chart}
                       formatter={(unixTime) => moment(unixTime).calendar()}
                     />
                   </Lazy>
