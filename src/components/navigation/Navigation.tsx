@@ -9,13 +9,16 @@ export class Navigation extends Component {
     return (
       <ul>
         <li>
-          <Link to="/hello">Hello</Link>
-        </li>
-        <li>
           <Link to="/">Root</Link>
         </li>
         <li>
-          <Link to="/screener/42">Screener</Link>
+          <Link to="/screener/table">Screener table</Link>
+        </li>
+        <li>
+          <Link to="/ticker/summary/AAPL">AAPL</Link>
+        </li>
+        <li>
+          <Link to="/ticker/summary/SNAP">SNAP</Link>
         </li>
       </ul>
     );

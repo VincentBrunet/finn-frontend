@@ -3,16 +3,17 @@ import * as React from 'react';
 import { Route } from 'react-router-dom';
 import { Switch } from 'react-router-dom';
 
-import { ScreenerTable } from '../pages/ScreenerTable';
-
 import { Component } from '../Component';
+
+import { ScreenerTable } from '../pages/ScreenerTable';
+import { TickerSummary } from '../pages/TickerSummary';
 
 export class Navigated extends Component {
   onRender() {
     return (
       <Switch>
-        <Route path="/hello">Hello</Route>
-        <Route path="/screener/:value" component={ScreenerTable} />
+        <Route path="/screener/table" component={ScreenerTable} />
+        <Route path="/ticker/summary/:code" component={TickerSummary} />
         <Route path="/">Root</Route>
       </Switch>
     );

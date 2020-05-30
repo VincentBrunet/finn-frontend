@@ -1,17 +1,8 @@
 import * as React from 'react';
 
-import { Component } from '../Component';
+import { Chart } from 'canvasjs';
 
-import {
-  LineChart,
-  CartesianGrid,
-  XAxis,
-  YAxis,
-  Tooltip,
-  Legend,
-  Line,
-  ResponsiveContainer
-} from 'recharts';
+import { Component } from '../Component';
 
 export interface ChartLinePoint {
   x: number;
@@ -35,6 +26,8 @@ export class ChartLine extends Component<ChartLineProps, ChartLineState> {
     if (count <= 0) {
       return undefined;
     }
+    return <div />;
+    /*
     return (
       <ResponsiveContainer debounce={100}>
         <LineChart>
@@ -47,11 +40,11 @@ export class ChartLine extends Component<ChartLineProps, ChartLineState> {
             wrapperStyle={{ zIndex: 1000 }}
             allowEscapeViewBox={{
               x: false,
-              y: true
+              y: true,
             }}
           />
           {count > 1 ? <Legend /> : undefined}
-          {this.props.series?.map(s => (
+          {this.props.series?.map((s) => (
             <Line
               isAnimationActive={false}
               dataKey="y"
@@ -66,5 +59,6 @@ export class ChartLine extends Component<ChartLineProps, ChartLineState> {
         </LineChart>
       </ResponsiveContainer>
     );
+    */
   }
 }

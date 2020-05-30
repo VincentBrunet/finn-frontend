@@ -3,15 +3,16 @@ import * as React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 
 import { Component } from './Component';
-import { ScreenerTable } from './pages/ScreenerTable';
-import { TickerSummary } from './pages/TickerSummary';
+
+import { Navigation } from './navigation/Navigation';
+import { Navigated } from './navigation/Navigated';
 
 export class Application extends Component {
   onRender() {
     return (
       <BrowserRouter>
-        <TickerSummary />
-        <ScreenerTable />
+        <Navigation />
+        <Navigated />
       </BrowserRouter>
     );
   }

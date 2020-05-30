@@ -18,7 +18,7 @@ export class Lazy extends Component<LazyProps, LazyState> {
   private ref?: HTMLDivElement;
   onCreate() {
     this.observer = new IntersectionObserver(this.onIntersection, {
-      threshold: 0
+      threshold: 0,
     });
     if (this.ref) {
       this.observer.observe(this.ref);
@@ -41,10 +41,12 @@ export class Lazy extends Component<LazyProps, LazyState> {
       this.observer?.unobserve(this.ref);
     }
     this.ref = ref;
-    this.observer?.observe(this.ref);
+    if (this.ref) {
+      this.observer?.observe(this.ref);
+    }
   };
   onIntersection = (entries: IntersectionObserverEntry[]) => {
-    const visible = entries.some(entry => {
+    const visible = entries.some((entry) => {
       return entry.isIntersecting;
     });
     if (this.delay) {
@@ -52,7 +54,7 @@ export class Lazy extends Component<LazyProps, LazyState> {
     }
     this.delay = setTimeout(() => {
       this.setState({
-        visible: visible
+        visible: visible,
       });
     }, this.props.delay ?? 100);
   };

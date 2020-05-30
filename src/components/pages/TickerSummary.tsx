@@ -13,15 +13,18 @@ import { Container, Row, Col, Card } from 'react-bootstrap';
 import * as moment from 'moment';
 
 import { Numbers } from '../../services/utils/Numbers';
+import { RouteComponentProps } from 'react-router-dom';
 
-interface TickerSummaryProps {}
+interface TickerSummaryProps extends RouteComponentProps {}
 interface TickerSummaryState {
   charts?: ChartLineSerie[];
 }
 
 export class TickerSummary extends Component<TickerSummaryProps, TickerSummaryState> {
   async onUpdateProps() {
-    const result = await axios.get('http://127.0.0.1:3000/ticker/summary/AAPL');
+    const result = await axios.get(
+      'http://127.0.0.1:3000/ticker/summary/' + this.props.match.params.code
+    );
     const data = result.data.data;
 
     const charts: ChartLineSerie[] = [];
@@ -66,9 +69,9 @@ export class TickerSummary extends Component<TickerSummaryProps, TickerSummarySt
         points: chart.values.map((value: any) => {
           return {
             x: new Date(value.stamp).getTime(),
-            y: value.value / divisor
+            y: value.value / divisor,
           };
-        })
+        }),
       };
 
       serie.points.sort((a, b) => {
@@ -79,7 +82,7 @@ export class TickerSummary extends Component<TickerSummaryProps, TickerSummarySt
     }
 
     this.setState({
-      charts: charts
+      charts: charts,
     });
   }
 
@@ -94,14 +97,14 @@ export class TickerSummary extends Component<TickerSummaryProps, TickerSummarySt
                   body
                   style={{
                     boxShadow: '0 8px 11px rgba(0,0,0,0.1)',
-                    margin: '10px 0'
+                    margin: '10px 0',
                   }}
                 >
                   <Card.Text>{chart.name}</Card.Text>
                   <Lazy width="100%" height="150px">
                     <ChartLine
                       series={[chart]}
-                      formatter={unixTime => moment(unixTime).calendar()}
+                      formatter={(unixTime) => moment(unixTime).calendar()}
                     />
                   </Lazy>
                 </Card>
