@@ -33,33 +33,31 @@ export class TickerSummary extends Component<
         return value.value;
       });
 
-      const divisor = Numbers.chooseArrayDivisor(ys);
-
       const name = chart.metric.name;
       const category = chart.metric.category;
-      let note = "";
-      if (divisor === Numbers.trillion) {
-        note = "Trillions";
-      } else if (divisor === Numbers.billion) {
-        note = "Billions";
-      } else if (divisor === Numbers.million) {
-        note = "Millions";
-      } else if (divisor === Numbers.thousand) {
-        note = "Thousands";
-      }
-      if (note) {
-        note = `(${note})`;
-      }
 
       let units = new Set<string>();
       for (let i = 0; i < chart.values.length; i++) {
         const value = chart.values[i];
         units.add(value.unit);
       }
+      const unit = units.size == 1 ? [...units][0] ?? "" : "";
+
+      let divisor = Numbers.chooseArrayDivisor(ys);
+      let note = "";
+      if (divisor === Numbers.trillion) {
+        note = "T ";
+      } else if (divisor === Numbers.billion) {
+        note = "B ";
+      } else if (divisor === Numbers.million) {
+        note = "M ";
+      } else if (divisor === Numbers.thousand) {
+        divisor = 1;
+      }
 
       const serie: ChartLineSerie = {
-        unit: [...units].join(","),
-        name: `[${category}] ${name} ${note}`,
+        name: `[${category}] ${name}`,
+        unit: `${note}${unit}`,
         points: chart.values.map((value: any) => {
           return {
             x: new Date(value.stamp).getTime(),

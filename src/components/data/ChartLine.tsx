@@ -34,8 +34,8 @@ export class ChartLine extends Component<ChartLineProps, ChartLineState> {
           data: {
             datasets: [
               {
-                borderColor: "#3AA3BB",
-                backgroundColor: "#3AA3BB",
+                borderColor: "#fff",
+                backgroundColor: "#fff",
                 label: serie.name,
                 pointRadius: 0,
                 pointBorderWidth: 0,
@@ -61,8 +61,13 @@ export class ChartLine extends Component<ChartLineProps, ChartLineState> {
                   ticks: {
                     fontColor: "white",
                     callback: function (value, index, values) {
-                      return value + " " + serie.unit;
+                      return (
+                        parseFloat(value.toString()).toLocaleString() +
+                        " " +
+                        serie.unit
+                      );
                     },
+                    maxTicksLimit: 5,
                   },
                 },
               ],
@@ -71,6 +76,12 @@ export class ChartLine extends Component<ChartLineProps, ChartLineState> {
                   type: "time",
                   ticks: {
                     fontColor: "white",
+                    minRotation: 45,
+                    maxRotation: 45,
+                    min: new Date("2000"),
+                  },
+                  time: {
+                    unit: "year",
                   },
                 },
               ],
@@ -78,6 +89,20 @@ export class ChartLine extends Component<ChartLineProps, ChartLineState> {
             tooltips: {
               intersect: false,
               mode: "index",
+              callbacks: {
+                title: (
+                  item: Chart.ChartTooltipItem[],
+                  data: Chart.ChartData
+                ) => {
+                  return item[0].xLabel?.toString() || "";
+                },
+                label: (
+                  item: Chart.ChartTooltipItem,
+                  data: Chart.ChartData
+                ) => {
+                  return item.yLabel + " " + serie.unit ?? "";
+                },
+              },
             },
             animation: {
               duration: 0,
