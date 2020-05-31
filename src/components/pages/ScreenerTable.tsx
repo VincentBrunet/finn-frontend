@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 
 import { Table, TableCell } from "../data/Table";
 
@@ -6,6 +6,8 @@ import { Component } from "../Component";
 
 import { Strings } from "../../services/utils/Strings";
 import { Api } from "../../services/utils/Api";
+
+import { Card } from "../interface/Card";
 
 interface ScreenerTableProps {}
 interface ScreenerTableState {
@@ -56,6 +58,10 @@ export class ScreenerTable extends Component<
   }
 
   onRender() {
-    return <Table head={this.state?.head} body={this.state?.body} />;
+    return (
+      <Card>
+        <Table head={this.state?.head} body={this.state?.body} />
+      </Card>
+    );
   }
 }

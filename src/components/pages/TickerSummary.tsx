@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 
 import { Component } from "../Component";
 
@@ -41,7 +41,7 @@ export class TickerSummary extends Component<
         const value = chart.values[i];
         units.add(value.unit);
       }
-      const unit = units.size == 1 ? [...units][0] ?? "" : "";
+      const unit = units.size === 1 ? [...units][0] ?? "" : "";
 
       let divisor = Numbers.chooseArrayDivisor(ys);
       let note = "";
@@ -80,11 +80,7 @@ export class TickerSummary extends Component<
 
   onRender() {
     return (
-      <Container
-        style={{
-          backgroundColor: "#1E264F",
-        }}
-      >
+      <Container>
         <Row style={{ margin: "10px 0" }}>
           {this.state?.charts?.map((chart, index) => {
             return (
