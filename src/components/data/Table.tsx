@@ -10,6 +10,9 @@ export interface TableCell {
 export interface TableProps {
   head?: TableCell[];
   body?: TableCell[][];
+
+  pageCount?: number;
+  pageIndex?: number;
 }
 
 interface TableState {
@@ -49,6 +52,15 @@ export class Table extends Component<TableProps, TableState> {
         }
         return diff;
       });
+    }
+    // Pagination optionally
+
+    const pageIndex = this.props.pageIndex ?? 0;
+    const pageCount = this.props.pageCount;
+    if (pageCount) {
+      const rowStart = pageIndex * pageCount;
+      const rowEnd = rowStart + pageCount;
+      body = body.slice(rowStart, rowEnd);
     }
     // Render
     return (

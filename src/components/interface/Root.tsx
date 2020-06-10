@@ -19,7 +19,7 @@ const gradient =
 export class Root extends Component {
   onRender() {
     return (
-      <Box background={gradient}>
+      <Box background={gradient} width="100%" height="100%">
         <FlexContainer direction="row" width="100%" height="100%">
           <FlexItem width="200px" grow={0} shrink={0}>
             <Menu />

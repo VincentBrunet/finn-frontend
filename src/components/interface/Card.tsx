@@ -12,7 +12,7 @@ export interface CardProps {
 export class Card extends Component {
   onRender() {
     return (
-      <FlexItem width="50%">
+      <FlexItem width="100%">
         <Box background="#686877" shadow="0 0 8px 0 rgba(0, 0, 0, 0.5)">
           {this.props.children}
         </Box>

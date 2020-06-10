@@ -9,6 +9,10 @@ import { Api } from "../../services/utils/Api";
 
 import { Card } from "../interface/Card";
 
+import { Metric } from "../../services/types/Metric";
+import { Ticker } from "../../services/types/Ticker";
+import { Unit } from "../../services/types/Unit";
+
 interface ScreenerTableProps {}
 interface ScreenerTableState {
   head?: TableCell[];
@@ -20,13 +24,23 @@ export class ScreenerTable extends Component<
   ScreenerTableState
 > {
   async onUpdateProps() {
+    const metricById = await Metric.byId();
+    const tickerById = await Ticker.byId();
+    const unitById = await Unit.byId();
+
+    console.log("Metric", metricById);
+    console.log("Unit", unitById);
+
     const apiData = await Api.getScreenerTable();
-    const apiColumns = apiData.columns;
+
+    const apiMetrics = apiData.metrics;
     const apiRows = apiData.rows;
 
     const head: TableCell[] = [{ text: "Ticker" }, { text: "Name" }];
-    for (const apiColumn of apiColumns) {
-      head.push({ text: apiColumn?.metric?.name });
+    for (const apiMetric of apiMetrics) {
+      const metric = metricById.get(apiMetric);
+      console.log("metric", metric);
+      head.push({ text: metric?.name + "-" + metric?.category });
     }
 
     const body: TableCell[][] = [];
@@ -35,13 +49,15 @@ export class ScreenerTable extends Component<
       for (let i = 0; i < apiRow.length; i++) {
         const apiCell = apiRow[i];
         if (i === 0) {
-          cells.push({ text: apiCell.code + "." + apiCell.country });
-          cells.push({ text: Strings.ellipsis(apiCell.name, 32) });
+          const ticker = tickerById.get(apiCell);
+          cells.push({ text: ticker?.code });
+          cells.push({ text: Strings.ellipsis(ticker?.name ?? "", 32) });
         } else {
           if (apiCell) {
+            const unit = unitById.get(apiCell[1]);
             cells.push({
-              number: apiCell.value,
-              unit: apiCell.unit.symbol ?? apiCell.unit.code,
+              number: apiCell[0],
+              unit: unit?.symbol ?? unit?.code,
             });
           } else {
             cells.push({});
@@ -60,7 +76,11 @@ export class ScreenerTable extends Component<
   onRender() {
     return (
       <Card>
-        <Table head={this.state?.head} body={this.state?.body} />
+        <Table
+          head={this.state?.head}
+          body={this.state?.body}
+          pageCount={100}
+        />
       </Card>
     );
   }

@@ -15,6 +15,10 @@ import { Numbers } from "../../services/utils/Numbers";
 
 import { RouteComponentProps } from "react-router-dom";
 
+import { Metric } from "../../services/types/Metric";
+import { Ticker } from "../../services/types/Ticker";
+import { Unit } from "../../services/types/Unit";
+
 interface TickerSummaryProps extends RouteComponentProps<{ code: string }> {}
 interface TickerSummaryState {
   charts?: ChartLineSerie[];
@@ -25,16 +29,20 @@ export class TickerSummary extends Component<
   TickerSummaryState
 > {
   async onUpdateProps() {
+    const metricById = await Metric.byId();
+
     const data = await Api.getTickerSummary(this.props.match.params.code);
 
     const charts: ChartLineSerie[] = [];
     for (const chart of data.charts) {
+      const metric = metricById.get(chart.metric_id);
+
       const ys = chart.values.map((value: any) => {
         return value.value;
       });
 
-      const name = chart.metric.name;
-      const category = chart.metric.category;
+      const name = metric?.name ?? "";
+      const category = metric?.category ?? "";
 
       let units = new Set<string>();
       for (let i = 0; i < chart.values.length; i++) {
