@@ -7,21 +7,17 @@ import { Component } from "../Component";
 
 import { ScreenerTable } from "../pages/ScreenerTable";
 import { TickerSummary } from "../pages/TickerSummary";
-
-import { Scroll } from "../basics/Scroll";
-import { FlexContainer } from "../basics/FlexContainer";
+import { Scroll } from "../atomics/Scroll";
 
 export class Content extends Component {
   onRender() {
     return (
       <Scroll>
-        <FlexContainer direction="row">
-          <Switch>
-            <Route path="/screener/table" component={ScreenerTable} />
-            <Route path="/ticker/summary/:code" component={TickerSummary} />
-            <Route path="/">Root</Route>
-          </Switch>
-        </FlexContainer>
+        <Switch>
+          <Route path="/screener/table" component={ScreenerTable} />
+          <Route path="/ticker/summary/:code" component={TickerSummary} />
+          <Route path="/">Root</Route>
+        </Switch>
       </Scroll>
     );
   }

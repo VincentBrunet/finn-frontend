@@ -1,23 +1,29 @@
 import React from "react";
 
+import moment from "moment";
+
+import { RouteComponentProps } from "react-router-dom";
+
 import { Component } from "../Component";
 
 import { Lazy } from "../util/Lazy";
 
 import { ChartLine, ChartLineSerie } from "../data/ChartLine";
 
-import { Container, Row, Col, Card } from "react-bootstrap";
+import { Box } from "../atomics/Box";
+import { Layout } from "../atomics/Layout";
+import { Responsive } from "../atomics/Responsive";
 
-import moment from "moment";
+import { Card } from "../interface/Card";
 
 import { Api } from "../../services/utils/Api";
 import { Numbers } from "../../services/utils/Numbers";
 
-import { RouteComponentProps } from "react-router-dom";
-
 import { Metric } from "../../services/types/Metric";
 import { Ticker } from "../../services/types/Ticker";
 import { Unit } from "../../services/types/Unit";
+
+import { Colors } from "../../services/utils/Colors";
 
 interface TickerSummaryProps extends RouteComponentProps<{ code: string }> {}
 interface TickerSummaryState {
@@ -88,33 +94,23 @@ export class TickerSummary extends Component<
 
   onRender() {
     return (
-      <Container>
-        <Row style={{ margin: "10px 0" }}>
-          {this.state?.charts?.map((chart, index) => {
-            return (
-              <Col xs={12} md={6} xl={4} key={index}>
-                <Card
-                  body
-                  style={{
-                    boxShadow: "0 8px 11px rgba(0,0,0,0.1)",
-                    backgroundColor: "#133D9C",
-                    color: "white",
-                    margin: "10px 0",
-                  }}
-                >
-                  <Card.Text>{chart.name}</Card.Text>
-                  <Lazy width="100%" height="150px">
-                    <ChartLine
-                      serie={chart}
-                      formatter={(unixTime) => moment(unixTime).calendar()}
-                    />
-                  </Lazy>
-                </Card>
-              </Col>
-            );
-          })}
-        </Row>
-      </Container>
+      <Layout direction="row" wrap={true} padding={4}>
+        {this.state?.charts?.map((chart, index) => {
+          return (
+            <Responsive key={index} xs={100} sm={50} md={33.3} lg={25} xl={20}>
+              <Card>
+                <div>{chart.name}</div>
+                <Lazy width="100%" height="150px">
+                  <ChartLine
+                    serie={chart}
+                    formatter={(unixTime) => moment(unixTime).calendar()}
+                  />
+                </Lazy>
+              </Card>
+            </Responsive>
+          );
+        })}
+      </Layout>
     );
   }
 }

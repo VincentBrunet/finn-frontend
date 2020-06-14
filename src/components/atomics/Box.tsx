@@ -2,11 +2,10 @@ import React from "react";
 
 import { Component } from "../Component";
 
-export interface BoxProps {
+interface BoxProps {
   background?: string;
   shadow?: string;
-  width?: string;
-  height?: string;
+  border?: string;
 }
 
 export class Box extends Component<BoxProps> {
@@ -16,8 +15,9 @@ export class Box extends Component<BoxProps> {
         style={{
           background: this.props.background,
           boxShadow: this.props.shadow,
-          width: this.props.width,
-          height: this.props.height,
+          border: this.props.border,
+          width: "100%",
+          height: "100%",
         }}
       >
         {this.props.children}

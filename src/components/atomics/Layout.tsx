@@ -2,26 +2,31 @@ import React from "react";
 
 import { Component } from "../Component";
 
-export interface FlexItemProps {
+interface LayoutProps {
+  direction?: "row" | "column" | "column-reverse" | "row-reverse";
   grow?: number;
   shrink?: number;
+  wrap?: boolean;
   width?: string;
   height?: string;
-  padding?: string;
-  margin?: string;
+  padding?: number;
 }
 
-export class FlexItem extends Component<FlexItemProps> {
+export class Layout extends Component<LayoutProps> {
   onRender() {
     return (
       <div
         style={{
+          display: "flex",
+          flexDirection: this.props.direction,
           flexGrow: this.props.grow,
           flexShrink: this.props.shrink,
-          height: this.props.height,
+          flexWrap: this.props.wrap ? "wrap" : undefined,
           width: this.props.width,
+          height: this.props.height,
+          minHeight: 0,
+          minWidth: 0,
           padding: this.props.padding,
-          margin: this.props.margin,
         }}
       >
         {this.props.children}

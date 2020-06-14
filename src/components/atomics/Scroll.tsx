@@ -2,7 +2,7 @@ import React from "react";
 
 import { Component } from "../Component";
 
-export interface ScrollProps {}
+interface ScrollProps {}
 
 export class Scroll extends Component<ScrollProps> {
   onRender() {

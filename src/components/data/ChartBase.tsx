@@ -9,10 +9,6 @@ export interface ChartBaseProps {
 }
 
 export class ChartBase extends Component<ChartBaseProps> {
-  private static _id = 0;
-
-  private id = "chartbase-" + (ChartBase._id++).toString(16);
-
   private chart?: Chart;
 
   onUpdate() {

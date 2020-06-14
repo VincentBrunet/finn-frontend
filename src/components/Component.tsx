@@ -7,6 +7,9 @@ export abstract class Component<
   Props = ComponentProps,
   State = ComponentState
 > extends React.Component<Props, State> {
+  readonly id = "c:" + (Component._id++).toString(16);
+  private static _id = 0;
+
   constructor(props: Readonly<Props>) {
     super(props);
     this.safe(this.onAlloc);

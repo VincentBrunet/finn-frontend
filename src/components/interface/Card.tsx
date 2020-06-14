@@ -2,19 +2,19 @@ import React from "react";
 
 import { Component } from "../Component";
 
-import { Box } from "../basics/Box";
-import { FlexItem } from "../basics/FlexItem";
+import { Box } from "../atomics/Box";
+import { Layout } from "../atomics/Layout";
 
-export interface CardProps {
-  size?: "full" | "semi" | "quarter";
-}
+import { Colors } from "../../services/utils/Colors";
+
+export interface CardProps {}
 
 export class Card extends Component {
   onRender() {
     return (
-      <FlexItem width="100%">
-        <Box>{this.props.children}</Box>
-      </FlexItem>
+      <Layout padding={4}>
+        <Box background={Colors.Surfaces.Card}>{this.props.children}</Box>
+      </Layout>
     );
   }
 }

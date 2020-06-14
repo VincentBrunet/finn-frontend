@@ -4,15 +4,15 @@ import { Link } from "react-router-dom";
 
 import { Component } from "../Component";
 
-import { Box } from "../basics/Box";
+import { Box } from "../atomics/Box";
+import { Colors } from "../../services/utils/Colors";
 
 export class Menu extends Component {
   onRender() {
     return (
       <Box
-        background="#20253E"
-        shadow="0 0 8px 0 rgba(0, 0, 0, 0.5)"
-        height="100%"
+        background={Colors.Surfaces.Menu}
+        shadow={`0 0 8px 0 ${Colors.Effects.Shadow}`}
       >
         <ul>
           <li>
