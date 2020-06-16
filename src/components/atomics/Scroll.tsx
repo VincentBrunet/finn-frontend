@@ -2,7 +2,10 @@ import React from "react";
 
 import { Component } from "../Component";
 
-interface ScrollProps {}
+interface ScrollProps {
+  x?: boolean;
+  y?: boolean;
+}
 
 export class Scroll extends Component<ScrollProps> {
   onRender() {
@@ -11,7 +14,8 @@ export class Scroll extends Component<ScrollProps> {
         style={{
           height: "100%",
           width: "100%",
-          overflow: "auto",
+          overflowX: this.props.x ? "auto" : "hidden",
+          overflowY: this.props.y ? "auto" : "hidden",
         }}
       >
         {this.props.children}

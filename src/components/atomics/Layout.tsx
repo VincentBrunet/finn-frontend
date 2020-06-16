@@ -24,8 +24,6 @@ export class Layout extends Component<LayoutProps> {
           flexWrap: this.props.wrap ? "wrap" : undefined,
           width: this.props.width,
           height: this.props.height,
-          minHeight: 0,
-          minWidth: 0,
           padding: this.props.padding,
         }}
       >

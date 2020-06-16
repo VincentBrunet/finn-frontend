@@ -9,15 +9,20 @@ import { Box } from "../atomics/Box";
 import { Layout } from "../atomics/Layout";
 
 import { Colors } from "../../services/utils/Colors";
+import { Responsive } from "../atomics/Responsive";
 
 export class Root extends Component {
   onRender() {
     return (
       <Box background={Colors.Surfaces.Root}>
         <Layout direction="row" height="100%" width="100%">
-          <Layout width="200px" shrink={0} grow={0}>
+          <Responsive
+            visible={{ xs: false, sm: true }}
+            height="100%"
+            width={{ sm: 100, md: 200, lg: 300 }}
+          >
             <Menu />
-          </Layout>
+          </Responsive>
           <Layout grow={1} shrink={1}>
             <Content />
           </Layout>

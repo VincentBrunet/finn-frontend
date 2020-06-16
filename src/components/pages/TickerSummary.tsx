@@ -93,24 +93,30 @@ export class TickerSummary extends Component<
   }
 
   onRender() {
-    return (
-      <Layout direction="row" wrap={true} padding={4}>
-        {this.state?.charts?.map((chart, index) => {
-          return (
-            <Responsive key={index} xs={100} sm={50} md={33.3} lg={25} xl={20}>
-              <Card>
-                <div>{chart.name}</div>
-                <Lazy width="100%" height="150px">
-                  <ChartLine
-                    serie={chart}
-                    formatter={(unixTime) => moment(unixTime).calendar()}
-                  />
-                </Lazy>
-              </Card>
-            </Responsive>
-          );
-        })}
-      </Layout>
-    );
+    return this.state?.charts?.map((chart, index) => {
+      return (
+        <Responsive
+          key={index}
+          width={{
+            xs: "100%",
+            sm: "100%",
+            md: "50%",
+            lg: "33.3%",
+            xl: "25%",
+            hd: "20%",
+          }}
+        >
+          <Card>
+            <div>{chart.name}</div>
+            <Lazy width="100%" height="150px">
+              <ChartLine
+                serie={chart}
+                formatter={(unixTime) => moment(unixTime).calendar()}
+              />
+            </Lazy>
+          </Card>
+        </Responsive>
+      );
+    });
   }
 }
