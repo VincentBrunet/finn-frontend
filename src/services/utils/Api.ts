@@ -5,7 +5,8 @@ import { Unit } from "../types/Unit";
 import { Ticker } from "../types/Ticker";
 
 export class Api {
-  static root = "http://192.168.1.54:3001";
+  //static root = "http://192.168.1.54:3001";
+  static root = "http://127.0.0.1:3001";
 
   public static async getMetricList(): Promise<Metric[]> {
     return await Api.get("/metric/list");
