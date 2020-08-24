@@ -6,6 +6,7 @@ interface BoxProps {
   background?: string;
   shadow?: string;
   border?: string;
+  borderRadius?: string | number;
 }
 
 export class Box extends Component<BoxProps> {
@@ -16,6 +17,7 @@ export class Box extends Component<BoxProps> {
           background: this.props.background,
           boxShadow: this.props.shadow,
           border: this.props.border,
+          borderRadius: this.props.borderRadius,
           width: "100%",
           height: "100%",
         }}

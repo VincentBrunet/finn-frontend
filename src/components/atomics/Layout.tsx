@@ -7,9 +7,10 @@ interface LayoutProps {
   grow?: number;
   shrink?: number;
   wrap?: boolean;
-  width?: string;
-  height?: string;
-  padding?: number;
+  width?: number | string;
+  height?: number | string;
+  padding?: number | string;
+  margin?: number | string;
 }
 
 export class Layout extends Component<LayoutProps> {
@@ -25,6 +26,7 @@ export class Layout extends Component<LayoutProps> {
           width: this.props.width,
           height: this.props.height,
           padding: this.props.padding,
+          margin: this.props.margin,
         }}
       >
         {this.props.children}

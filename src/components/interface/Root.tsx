@@ -2,7 +2,7 @@ import React from "react";
 
 import { Component } from "../Component";
 import { Content } from "./Content";
-import { Menu } from "./Menu";
+import { MenuSide } from "./navigation/MenuSide";
 
 import { Box } from "../atomics/Box";
 
@@ -18,10 +18,10 @@ export class Root extends Component {
         <Layout direction="row" height="100%" width="100%">
           <Responsive
             visible={{ xs: false, sm: true }}
-            height="100%"
+            height={{ default: "100%" }}
             width={{ sm: 100, md: 200, lg: 300 }}
           >
-            <Menu />
+            <MenuSide />
           </Responsive>
           <Layout grow={1} shrink={1}>
             <Content />
