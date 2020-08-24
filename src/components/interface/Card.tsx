@@ -14,11 +14,7 @@ export class Card extends Component {
   onRender() {
     return (
       <Layout padding={4} height="100%" width="100%">
-        <Box background={Colors.Surfaces.Card}>
-          <Scroll x={false} y={false}>
-            {this.props.children}
-          </Scroll>
-        </Box>
+        <Box background={Colors.Surfaces.Card}>{this.props.children}</Box>
       </Layout>
     );
   }
