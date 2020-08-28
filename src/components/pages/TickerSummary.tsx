@@ -1,29 +1,21 @@
-import React from "react";
-
 import moment from "moment";
-
+import React from "react";
 import { RouteComponentProps } from "react-router-dom";
 
-import { Component } from "../Component";
-
-import { Lazy } from "../util/Lazy";
-
-import { ChartLine, ChartLineSerie } from "../data/ChartLine";
-
-import { Box } from "../atomics/Box";
-import { Layout } from "../atomics/Layout";
-import { Responsive } from "../atomics/Responsive";
-
-import { Card } from "../interface/Card";
-
-import { Api } from "../../services/utils/Api";
-import { Numbers } from "../../services/utils/Numbers";
-
 import { Metric } from "../../services/types/Metric";
-import { Ticker } from "../../services/types/Ticker";
-import { Unit } from "../../services/types/Unit";
-
+import { Api } from "../../services/utils/Api";
 import { Colors } from "../../services/utils/Colors";
+import { Numbers } from "../../services/utils/Numbers";
+import { Component } from "../Component";
+import { Responsive } from "../atomics/Responsive";
+import { ChartLine, ChartLineSerie } from "../data/ChartLine";
+import { Card } from "../interface/content/Card";
+import { CardBody } from "../interface/content/CardBody";
+import { CardHead } from "../interface/content/CardHead";
+import { Page } from "../interface/content/Page";
+import { PageBody } from "../interface/content/PageBody";
+import { PageHead } from "../interface/content/PageHead";
+import { Lazy } from "../util/Lazy";
 
 interface TickerSummaryProps extends RouteComponentProps<{ code: string }> {}
 interface TickerSummaryState {
@@ -93,30 +85,40 @@ export class TickerSummary extends Component<
   }
 
   onRender() {
-    return this.state?.charts?.map((chart, index) => {
-      return (
-        <Responsive
-          key={index}
-          width={{
-            xs: "100%",
-            sm: "100%",
-            md: "50%",
-            lg: "33.3%",
-            xl: "25%",
-            hd: "20%",
-          }}
-        >
-          <Card>
-            <div>{chart.name}</div>
-            <Lazy width="100%" height="150px">
-              <ChartLine
-                serie={chart}
-                formatter={(unixTime) => moment(unixTime).calendar()}
-              />
-            </Lazy>
-          </Card>
-        </Responsive>
-      );
-    });
+    return (
+      <Page>
+        <PageHead title="Hello" />
+        <PageBody>
+          {this.state?.charts?.map((chart, index) => {
+            return (
+              <Responsive
+                key={index}
+                width={{
+                  xs: "100%",
+                  sm: "100%",
+                  md: "50%",
+                  lg: "33.3%",
+                  xl: "25%",
+                  hd: "20%",
+                }}
+              >
+                <Card>
+                  <CardHead title={chart.name} />
+                  <CardBody>
+                    <Lazy width="100%" height="150px">
+                      <ChartLine
+                        lineColor={Colors.Specs.Delimiter}
+                        serie={chart}
+                        formatter={(unixTime) => moment(unixTime).calendar()}
+                      />
+                    </Lazy>
+                  </CardBody>
+                </Card>
+              </Responsive>
+            );
+          })}
+        </PageBody>
+      </Page>
+    );
   }
 }

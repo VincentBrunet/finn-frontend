@@ -1,10 +1,8 @@
 import React from "react";
 
-import { Component } from "../Component";
-
 import { Subscription } from "../../services/rx/Subscription";
-
 import { Display } from "../../services/utils/Display";
+import { Component } from "../Component";
 
 interface ResponsiveRange<T> {
   xs?: T;
@@ -26,10 +24,10 @@ interface ResponsiveState {
 
 export class Responsive extends Component<ResponsiveProps, ResponsiveState> {
   sub?: Subscription;
+  state = {
+    size: Display.size.get(),
+  };
   onCreate() {
-    this.setState({
-      size: Display.size.get(),
-    });
     this.sub = Display.size.subscribe((size) => {
       this.setState({
         size: size,
@@ -51,6 +49,7 @@ export class Responsive extends Component<ResponsiveProps, ResponsiveState> {
     const height = this.resolve(this.props.height);
     return (
       <div
+        className="responsive"
         style={{
           width: width,
           height: height,

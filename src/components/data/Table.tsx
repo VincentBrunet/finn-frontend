@@ -54,7 +54,6 @@ export class Table extends Component<TableProps, TableState> {
       });
     }
     // Pagination optionally
-
     const pageIndex = this.props.pageIndex ?? 0;
     const pageCount = this.props.pageCount;
     if (pageCount) {
@@ -64,7 +63,7 @@ export class Table extends Component<TableProps, TableState> {
     }
     // Render
     return (
-      <table>
+      <table style={{ width: "100%" }}>
         <thead>{this.onRenderHead(this.props.head)}</thead>
         <tbody>{body.map(this.onRenderBody)}</tbody>
       </table>
@@ -96,7 +95,10 @@ export class Table extends Component<TableProps, TableState> {
         style={{
           whiteSpace: "nowrap",
           textOverflow: "ellipsis",
-          textAlign: cell.number !== undefined ? "right" : undefined,
+          paddingLeft: "5px",
+          paddingRight: "5px",
+          borderTop: "1px solid #eee",
+          textAlign: cell.number !== undefined ? "right" : "left",
         }}
         key={index}
         onClick={onClick}

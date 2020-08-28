@@ -1,13 +1,10 @@
 import React from "react";
-
 import { Link } from "react-router-dom";
 
+import { Colors } from "../../../services/utils/Colors";
 import { Component } from "../../Component";
-
 import { Box } from "../../atomics/Box";
 import { Label } from "../../atomics/Label";
-
-import { Colors } from "../../../services/utils/Colors";
 import { Layout } from "../../atomics/Layout";
 
 export interface MenuSideItemProps {
@@ -19,7 +16,7 @@ export interface MenuSideItemProps {
 export class MenuSideItem extends Component<MenuSideItemProps> {
   onRender() {
     return (
-      <Layout width="80%" margin="0 10%" padding={10}>
+      <Layout width="80%" margin="0 10%" padding="10px">
         <Link to={this.props.route} style={{ width: "100%" }}>
           <Box
             background={this.props.current ? Colors.Surfaces.Root : undefined}

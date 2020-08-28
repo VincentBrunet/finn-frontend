@@ -1,17 +1,19 @@
 import React from "react";
 
-import { Table, TableCell } from "../data/Table";
-
-import { Component } from "../Component";
-
-import { Strings } from "../../services/utils/Strings";
-import { Api } from "../../services/utils/Api";
-
-import { Card } from "../interface/Card";
-
 import { Metric } from "../../services/types/Metric";
 import { Ticker } from "../../services/types/Ticker";
 import { Unit } from "../../services/types/Unit";
+import { Api } from "../../services/utils/Api";
+import { Strings } from "../../services/utils/Strings";
+import { Component } from "../Component";
+import { Layout } from "../atomics/Layout";
+import { Table, TableCell } from "../data/Table";
+import { Card } from "../interface/content/Card";
+import { CardBody } from "../interface/content/CardBody";
+import { CardHead } from "../interface/content/CardHead";
+import { Page } from "../interface/content/Page";
+import { PageBody } from "../interface/content/PageBody";
+import { PageHead } from "../interface/content/PageHead";
 
 interface ScreenerTableProps {}
 interface ScreenerTableState {
@@ -75,13 +77,23 @@ export class ScreenerTable extends Component<
 
   onRender() {
     return (
-      <Card>
-        <Table
-          head={this.state?.head}
-          body={this.state?.body}
-          pageCount={100}
-        />
-      </Card>
+      <Page>
+        <PageHead title="Screener" />
+        <PageBody>
+          <Layout width="100%">
+            <Card>
+              <CardHead title="Tickers" />
+              <CardBody>
+                <Table
+                  head={this.state?.head}
+                  body={this.state?.body}
+                  pageCount={100}
+                />
+              </CardBody>
+            </Card>
+          </Layout>
+        </PageBody>
+      </Page>
     );
   }
 }

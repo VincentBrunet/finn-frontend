@@ -1,4 +1,4 @@
-import React from "react";
+import React, { CSSProperties } from "react";
 
 import { Component } from "../Component";
 
@@ -7,28 +7,26 @@ interface LayoutProps {
   grow?: number;
   shrink?: number;
   wrap?: boolean;
-  width?: number | string;
-  height?: number | string;
-  padding?: number | string;
-  margin?: number | string;
+  width?: string;
+  height?: string;
+  padding?: string;
+  margin?: string;
 }
 
 export class Layout extends Component<LayoutProps> {
   onRender() {
+    const style: CSSProperties = {
+      flexDirection: this.props.direction,
+      flexGrow: this.props.grow,
+      flexShrink: this.props.shrink,
+      flexWrap: this.props.wrap ? "wrap" : undefined,
+      width: this.props.width,
+      height: this.props.height,
+      padding: this.props.padding,
+      margin: this.props.margin,
+    };
     return (
-      <div
-        style={{
-          display: "flex",
-          flexDirection: this.props.direction,
-          flexGrow: this.props.grow,
-          flexShrink: this.props.shrink,
-          flexWrap: this.props.wrap ? "wrap" : undefined,
-          width: this.props.width,
-          height: this.props.height,
-          padding: this.props.padding,
-          margin: this.props.margin,
-        }}
-      >
+      <div className="layout" style={style}>
         {this.props.children}
       </div>
     );

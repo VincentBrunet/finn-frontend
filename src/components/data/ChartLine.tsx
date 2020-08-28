@@ -1,7 +1,6 @@
 import React from "react";
 
 import { Component } from "../Component";
-
 import { ChartBase } from "./ChartBase";
 
 export interface ChartLinePoint {
@@ -14,6 +13,8 @@ export interface ChartLineSerie {
   points: ChartLinePoint[];
 }
 export interface ChartLineProps {
+  lineColor?: string;
+  labelsColor?: string;
   serie?: ChartLineSerie;
   formatter?: (value: string | number) => string;
 }
@@ -34,8 +35,8 @@ export class ChartLine extends Component<ChartLineProps, ChartLineState> {
           data: {
             datasets: [
               {
-                borderColor: "#fff",
-                backgroundColor: "#fff",
+                borderColor: this.props.lineColor,
+                backgroundColor: this.props.lineColor,
                 label: serie.name,
                 pointRadius: 0,
                 pointBorderWidth: 0,
@@ -43,6 +44,7 @@ export class ChartLine extends Component<ChartLineProps, ChartLineState> {
                 data: serie.points.map((point) => {
                   return point.y;
                 }),
+                borderWidth: 2,
                 fill: false,
                 lineTension: 0,
               },
@@ -59,7 +61,7 @@ export class ChartLine extends Component<ChartLineProps, ChartLineState> {
               yAxes: [
                 {
                   ticks: {
-                    fontColor: "white",
+                    fontColor: this.props.labelsColor,
                     callback: function (value, index, values) {
                       return (
                         parseFloat(value.toString()).toLocaleString() +
@@ -75,7 +77,7 @@ export class ChartLine extends Component<ChartLineProps, ChartLineState> {
                 {
                   type: "time",
                   ticks: {
-                    fontColor: "white",
+                    fontColor: this.props.labelsColor,
                     minRotation: 45,
                     maxRotation: 45,
                     min: new Date("2000"),

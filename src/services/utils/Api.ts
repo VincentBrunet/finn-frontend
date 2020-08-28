@@ -1,12 +1,12 @@
 import axios from "axios";
 
 import { Metric } from "../types/Metric";
-import { Unit } from "../types/Unit";
 import { Ticker } from "../types/Ticker";
+import { Unit } from "../types/Unit";
 
 export class Api {
-  //static root = "http://192.168.1.54:3001";
-  static root = "http://127.0.0.1:3001";
+  static host = window.location.protocol + "//" + window.location.hostname;
+  static root = Api.host + ":3001";
 
   public static async getMetricList(): Promise<Metric[]> {
     return await Api.get("/metric/list");

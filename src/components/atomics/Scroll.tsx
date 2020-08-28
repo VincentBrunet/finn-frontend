@@ -11,9 +11,8 @@ export class Scroll extends Component<ScrollProps> {
   onRender() {
     return (
       <div
+        className="scroll"
         style={{
-          height: "100%",
-          width: "100%",
           overflowX: this.props.x ? "auto" : "hidden",
           overflowY: this.props.y ? "auto" : "hidden",
         }}
