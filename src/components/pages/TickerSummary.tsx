@@ -66,7 +66,7 @@ export class TickerSummary extends Component<
         unit: `${note}${unit}`,
         points: chart.values.map((value: any) => {
           return {
-            x: new Date(value.stamp).getTime(),
+            x: moment.utc(value.stamp),
             y: value.value / divisor,
           };
         }),

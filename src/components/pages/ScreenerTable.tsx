@@ -7,6 +7,7 @@ import { Api } from "../../services/utils/Api";
 import { Strings } from "../../services/utils/Strings";
 import { Component } from "../Component";
 import { Layout } from "../atomics/Layout";
+import { Scroll } from "../atomics/Scroll";
 import { Table, TableCell } from "../data/Table";
 import { Card } from "../interface/content/Card";
 import { CardBody } from "../interface/content/CardBody";
@@ -42,7 +43,7 @@ export class ScreenerTable extends Component<
     for (const apiMetric of apiMetrics) {
       const metric = metricById.get(apiMetric);
       console.log("metric", metric);
-      head.push({ text: metric?.name + "-" + metric?.category });
+      head.push({ text: metric?.name + " (" + metric?.category + ")" });
     }
 
     const body: TableCell[][] = [];
@@ -84,11 +85,13 @@ export class ScreenerTable extends Component<
             <Card>
               <CardHead title="Tickers" />
               <CardBody>
-                <Table
-                  head={this.state?.head}
-                  body={this.state?.body}
-                  pageCount={100}
-                />
+                <Scroll x={true}>
+                  <Table
+                    head={this.state?.head}
+                    body={this.state?.body}
+                    pageCount={100}
+                  />
+                </Scroll>
               </CardBody>
             </Card>
           </Layout>

@@ -15,7 +15,7 @@ export class Root extends Component {
         <Layout direction="row" width="100%" height="100%">
           <Responsive
             visible={{ xs: false, sm: true }}
-            width={{ sm: 100, md: 200, lg: 300 }}
+            width={{ sm: 150, md: 250, lg: 300 }}
           >
             <MenuSide />
           </Responsive>

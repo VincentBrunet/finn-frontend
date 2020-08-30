@@ -9,21 +9,21 @@ export class Api {
   static root = Api.host + ":3001";
 
   public static async getMetricList(): Promise<Metric[]> {
-    return await Api.get("/metric/list");
+    return await Api.get("/indices/metric-list");
   }
   public static async getUnitList(): Promise<Unit[]> {
-    return await Api.get("/unit/list");
+    return await Api.get("/indices/unit-list");
   }
   public static async getTickerList(): Promise<Ticker[]> {
-    return await Api.get("/ticker/list");
+    return await Api.get("/indices/ticker-list");
   }
 
   public static async getTickerSummary(code: string) {
-    return await Api.get("/ticker/summary/" + code);
+    return await Api.get("/pages/ticker-summary/" + code);
   }
 
   public static async getScreenerTable() {
-    return await Api.get("/screener/table");
+    return await Api.get("/pages/screener-table");
   }
 
   private static async get(path: string) {
