@@ -1,27 +1,127 @@
 import React from "react";
 
 import { Component } from "../Component";
+import { Layout } from "../atomics/Layout";
 
-export interface TableCell {
-  text?: string;
-  number?: number;
-  unit?: string;
-}
-export interface TableProps {
-  head?: TableCell[];
-  body?: TableCell[][];
+export interface TableProps<T> {
+  head?: JSX.Element[];
 
-  pageCount?: number;
-  pageIndex?: number;
+  body: T[][];
+
+  score?: (v: T, row: number, column: number) => number;
+  render: (v: T, row: number, column: number) => JSX.Element;
+
+  pageItems?: number;
+  pageCurrent?: number;
 }
 
 interface TableState {
+  body?: TableCell[][];
+
   sortIndex?: number;
   sortReverse?: boolean;
 }
 
-export class Table extends Component<TableProps, TableState> {
-  onClickCell = (column: number) => {
+interface TableCell {
+  score: number;
+  render: JSX.Element;
+}
+
+export class Table<T> extends Component<TableProps<T>, TableState> {
+  state: TableState = {};
+
+  onUpdateProps() {
+    // Render
+    const data = this.props.body ?? [];
+    const score = this.props.score;
+    const render = this.props.render;
+    const body = [];
+    for (let i = 0; i < data.length; i++) {
+      const cellRow = [];
+      const row = data[i];
+      for (let j = 0; j < row.length; j++) {
+        const col = row[j];
+        cellRow.push({
+          score: score ? score(col, i, j) : 0,
+          render: render(col, i, j),
+        });
+      }
+      body.push(cellRow);
+    }
+    this.setState({
+      body: body,
+    });
+  }
+
+  onRender() {
+    let body = this.state.body ?? [];
+    // Sort
+    const sortIndex = this.state.sortIndex;
+    const sortReverse = this.state.sortReverse;
+    if (sortIndex !== undefined) {
+      body = [...body];
+      body.sort((a, b) => {
+        const av = a[sortIndex];
+        const bv = b[sortIndex];
+        let diff = 0;
+        diff = av.score - bv.score;
+        if (sortReverse) {
+          diff = -diff;
+        }
+        return diff;
+      });
+    }
+    // Paginate
+    const pageCurrent = this.props.pageCurrent ?? 0;
+    const pageItems = this.props.pageItems;
+    if (pageItems) {
+      const rowStart = pageCurrent * pageItems;
+      const rowEnd = rowStart + pageItems;
+      body = body.slice(rowStart, rowEnd) ?? [];
+    }
+
+    const head = this.props.head ?? [];
+
+    const columns: JSX.Element[][] = [];
+
+    for (let i = 0; i < head.length; i++) {
+      const column: JSX.Element[] = [];
+      column.push(this.onRenderHead(head[i], i));
+      for (let j = 0; j < body.length; j++) {
+        column.push(this.onRenderBody(body[j][i].render, j));
+      }
+      columns.push(column);
+    }
+
+    return (
+      <Layout direction="row" grow={1}>
+        {columns.map((column, index) => {
+          return (
+            <Layout key={index} direction="column" grow={1}>
+              {column}
+            </Layout>
+          );
+        })}
+      </Layout>
+    );
+  }
+
+  onRenderHead = (head: JSX.Element, index: number) => {
+    const onClick = () => {
+      this.onClickHead(index);
+    };
+    return (
+      <Layout key={-1} onClick={onClick}>
+        {head}
+      </Layout>
+    );
+  };
+
+  onRenderBody = (body: JSX.Element, index: number) => {
+    return <Layout key={index}>{body}</Layout>;
+  };
+
+  onClickHead = (column: number) => {
     this.setState({
       sortIndex: column,
       sortReverse:
@@ -29,54 +129,7 @@ export class Table extends Component<TableProps, TableState> {
     });
   };
 
-  onRender() {
-    let body = this.props.body || [];
-    // Sorting optionally
-    const sortIndex = this.state?.sortIndex;
-    const sortReverse = this.state?.sortReverse;
-    if (sortIndex !== undefined) {
-      body = [...body];
-      body.sort((a, b) => {
-        const av = a[sortIndex];
-        const bv = b[sortIndex];
-        let diff = 0;
-        if (av.text !== undefined && bv.text !== undefined) {
-          diff = av.text.localeCompare(bv.text);
-        } else if (av.number !== undefined && bv.number !== undefined) {
-          diff = av.number - bv.number;
-        } else {
-          diff = +(av.number ?? 0) - +(bv.number ?? 0);
-        }
-        if (sortReverse) {
-          diff = -diff;
-        }
-        return diff;
-      });
-    }
-    // Pagination optionally
-    const pageIndex = this.props.pageIndex ?? 0;
-    const pageCount = this.props.pageCount;
-    if (pageCount) {
-      const rowStart = pageIndex * pageCount;
-      const rowEnd = rowStart + pageCount;
-      body = body.slice(rowStart, rowEnd);
-    }
-    // Render
-    return (
-      <table style={{ width: "100%" }}>
-        <thead>{this.onRenderHead(this.props.head)}</thead>
-        <tbody>{body.map(this.onRenderBody)}</tbody>
-      </table>
-    );
-  }
-  onRenderHead = (cells?: TableCell[]) => {
-    if (cells) {
-      return <tr>{this.onRenderCells(cells, true)}</tr>;
-    }
-  };
-  onRenderBody = (cells: TableCell[], index: number) => {
-    return <tr key={index}>{this.onRenderCells(cells, false)}</tr>;
-  };
+  /*
   onRenderCells(cells: TableCell[], clickable: boolean) {
     return cells.map((cell, index) => {
       return this.onRenderCell(cell, index, clickable);
@@ -86,7 +139,7 @@ export class Table extends Component<TableProps, TableState> {
     let onClick: (() => void) | undefined = undefined;
     if (clickable) {
       onClick = () => {
-        this.onClickCell(index);
+        this.onClickHead(index);
       };
     }
     const Tag = clickable ? "th" : "td";
@@ -116,4 +169,5 @@ export class Table extends Component<TableProps, TableState> {
     }
     return text + number + " " + unit;
   }
+  */
 }

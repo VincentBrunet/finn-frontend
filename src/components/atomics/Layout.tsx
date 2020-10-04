@@ -11,22 +11,24 @@ interface LayoutProps {
   height?: string;
   padding?: string;
   margin?: string;
+  onClick?: () => void;
 }
 
 export class Layout extends Component<LayoutProps> {
   onRender() {
+    const props = this.props;
     const style: CSSProperties = {
-      flexDirection: this.props.direction,
-      flexGrow: this.props.grow,
-      flexShrink: this.props.shrink,
-      flexWrap: this.props.wrap ? "wrap" : undefined,
-      width: this.props.width,
-      height: this.props.height,
-      padding: this.props.padding,
-      margin: this.props.margin,
+      flexDirection: props.direction,
+      flexGrow: props.grow,
+      flexShrink: props.shrink,
+      flexWrap: props.wrap ? "wrap" : undefined,
+      width: props.width,
+      height: props.height,
+      padding: props.padding,
+      margin: props.margin,
     };
     return (
-      <div className="layout" style={style}>
+      <div className="layout" style={style} onClick={props.onClick}>
         {this.props.children}
       </div>
     );
